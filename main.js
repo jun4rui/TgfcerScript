@@ -14,6 +14,10 @@
  * 0.3更新：卷动到最底部自动载入下一页内容；[作废]
  * 0.2更新：将Footer的功能全部放在顶部固定的导航条中；
  */
+//CTRL+ENTER提交
+Mousetrap.bind('ctrl+enter', function(){
+	$('#postform').submit();
+});
 
 // 20160303 自动识别图片并加上[img]标签
 $('textarea[name=message]').after('<br/><span id="funcAddImg">[上图]</span>')
