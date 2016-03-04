@@ -16,14 +16,14 @@
  */
 //CTRL+ENTER提交
 Mousetrap.bind('ctrl+enter', function(){
-	$('#postform').submit();
+	$('input[name=submit]').click();
 });
 
 // 20160303 自动识别图片并加上[img]标签
 $('textarea[name=message]').after('<br/><span id="funcAddImg">[上图]</span>')
 $('#funcAddImg').click(function(){
 	$('textarea[name=message]').val(
-		$('textarea[name=message]').val().replace(/((http|https){1}:\/\/[\/A-Za-z0-9\-\.]+\.(jpg|gif){1})/g,'[img]$1[/img]')
+		$('textarea[name=message]').val().replace(/((http|https){1}:\/\/[\/A-Za-z0-9\-\.\_]+\.(jpg|gif){1})/g,'[img]$1[/img]')
 	);
 });
 //20160303 表情库
