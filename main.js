@@ -69,6 +69,7 @@ addGlobalStyle(".face-unit {width: 64px;height: 64px;cursor: pointer;}");	//表�
 addGlobalStyle(".user-memo {padding:0 .5em; color:#F00;}");	//用户备注样式
 
 //CTRL+ENTER提交
+$('textarea[name=message]').addClass('mousetrap');
 Mousetrap.bind('ctrl+enter', function(){
 	$('input[name=submit]').click();
 });
