@@ -14,6 +14,17 @@
  * 0.3更新：卷动到最底部自动载入下一页内容；[作废]
  * 0.2更新：将Footer的功能全部放在顶部固定的导航条中；
  */
+//20160310 加入按住CTRL键后鼠标移动到图片上会自动在左下角显示图片的方法
+$('div.message>a').mouseover(function(){
+	if (window.event.ctrlKey){
+		$('#float-img').remove();
+		$('body').append('<img src="'+$(this).attr('href')+'" id="float-img" style="width:200px;position:fixed; left:0;bottom:0; z-index:99999;">');
+	}
+}).mouseout(function(){
+	$('#float-img').remove();
+});
+
+
 //初始化localStorate
 if (JSON.parse(window.localStorage.getItem('USER_MEMO'))==null){
 	window.localStorage.setItem('USER_MEMO','{}');
@@ -26,7 +37,7 @@ $("a[href^='index.php?action=my&uid='],a[href^='index.php?action=my&pic=&uid=']"
 	if ( $(this).attr('href').indexOf('index.php?action=my&pic=&uid=')>-1){
 		userUID = $(this).attr('href').split('&')[2].replace('=','');
 	}
-	console.log($(this).attr('href')+'|'+userUID);
+	//console.log($(this).attr('href')+'|'+userUID);
 	$(this).after('<span class="user-memo">'+(userMemo[userUID]||'')+'</span>');
 	//console.log($(this).text()+':'+userMemo[userUID]);
 });
