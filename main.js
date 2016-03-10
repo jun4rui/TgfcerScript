@@ -16,9 +16,11 @@
  */
 //20160310 加入按住CTRL键后鼠标移动到图片上会自动在左下角显示图片的方法
 $('div.message>a').mouseover(function(){
-	if (window.event.ctrlKey){
+	var currentEvent = window.event;
+	console.log(currentEvent);
+	if (currentEvent.ctrlKey){
 		$('#float-img').remove();
-		$('body').append('<img src="'+$(this).attr('href')+'" id="float-img" style="width:200px;position:fixed; left:0;bottom:0; z-index:99999;">');
+		$('body').append('<img src="'+$(this).attr('href')+'" class="mousetrap" id="float-img" style="width:200px;position:fixed; left:'+currentEvent.clientX+'px;top:'+currentEvent.clientY+'px; z-index:99999;">');
 	}
 }).mouseout(function(){
 	$('#float-img').remove();
