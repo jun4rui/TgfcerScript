@@ -17,7 +17,7 @@
 //20160310 加入按住CTRL键后鼠标移动到图片上会自动在左下角显示图片的方法
 $('div.message>a').mouseover(function(){
 	var currentEvent = window.event;
-	console.log(currentEvent);
+	//console.log(currentEvent);
 	if (currentEvent.ctrlKey){
 		$('#float-img').remove();
 		$('body').append('<img src="'+$(this).attr('href')+'" class="mousetrap" id="float-img" style="width:200px;position:fixed; left:'+currentEvent.clientX+'px;top:'+currentEvent.clientY+'px; z-index:99999;">');
@@ -31,24 +31,45 @@ $('div.message>a').mouseover(function(){
 if (JSON.parse(window.localStorage.getItem('USER_MEMO'))==null){
 	window.localStorage.setItem('USER_MEMO','{}');
 }
-//从localStorage获取用户信息
-var userMemo = JSON.parse(window.localStorage.getItem('USER_MEMO'));
+//更新/显示 屏幕上用户备注的函数
+function showUserMemo() {
+	//从localStorage获取用户信息
+	var userMemo = JSON.parse(window.localStorage.getItem('USER_MEMO'));
+	$('.user-memo').remove();
+	$("a[href^='index.php?action=my&uid='],a[href^='index.php?action=my&pic=&uid='],,a[href^='index.php?action=my&pic=1&uid=']").each(function () {
+		//跳过评分的
+		/*if ($(this).text()=='评分'){
+		 return false;
+		 }*/
+		var userUID = $(this).attr('href').split('&')[1].replace('=', '');
+		if ($(this).attr('href').indexOf('index.php?action=my&pic=&uid=') > -1 || $(this).attr('href').indexOf('index.php?action=my&pic=1&uid=') > -1) {
+			userUID = $(this).attr('href').split('&')[2].replace('=', '');
+		}
+		if (typeof(userMemo[userUID]) != 'undefined') {
+			$(this).after('<span class="user-memo" uid="' + userUID + '">[' + userMemo[userUID] + ']</span>');
+		} else {
+			$(this).after('<span class="user-memo" uid="' + userUID + '">[+]</span>');
+		}
+	});
+}
 
-$("a[href^='index.php?action=my&uid='],a[href^='index.php?action=my&pic=&uid=']").each(function () {
-	var userUID = $(this).attr('href').split('&')[1].replace('=','');
-	if ( $(this).attr('href').indexOf('index.php?action=my&pic=&uid=')>-1){
-		userUID = $(this).attr('href').split('&')[2].replace('=','');
+showUserMemo();
+//更新localStorage中用户备注的函数
+function updateUserMemo(inUID, inMemo){
+	var _userMemo = JSON.parse(window.localStorage.getItem('USER_MEMO'));
+	if (inMemo==''){
+		delete _userMemo[''+inUID];
+	}else{
+		_userMemo[inUID] = inMemo;
 	}
-	if(typeof(userMemo[userUID])!='undefined'){
-		$(this).after('<span class="user-memo">'+userMemo[userUID]+'</span>');
-	}
-});
+	window.localStorage.setItem('USER_MEMO',JSON.stringify(_userMemo));
+}
 //console.log(userMemo);
 //将用户的备注信息保存到localStorage中的USER_MEMO中去
 //window.localStorage.setItem('USER_MEMO',JSON.stringify(userMemo));
 //JSON.parse(window.localStorage.getItem('USER_MEMO'));
 //用户备注编辑功能
-
+/*
 if ( window.location.href.indexOf('http://wap.tgfcer.com/index.php?action=my&uid=')==0 || window.location.href.indexOf('http://wap.tgfcer.com/index.php?action=my&pic=&uid=')==0){
 	var tempUID = window.location.href.split('&')[1].replace('=','');
 	if (window.location.href.indexOf('http://wap.tgfcer.com/index.php?action=my&pic=&uid=')==0){
@@ -61,7 +82,13 @@ if ( window.location.href.indexOf('http://wap.tgfcer.com/index.php?action=my&uid
 		window.localStorage.setItem('USER_MEMO',JSON.stringify(userMemo));
 	});
 }
-
+*/
+//20160311 点击用户备注后出现弹出框修改备注
+$(document).delegate('.user-memo','click', function(){
+	var _inputUserMemo = prompt('更新该用户的备注信息', $(this).text());
+	updateUserMemo($(this).attr('uid'), _inputUserMemo);
+	showUserMemo();
+});
 
 
 
@@ -79,7 +106,7 @@ function addStyle(css) {
 }
 //20160306
 addGlobalStyle(".face-unit {width: 64px;height: 64px;cursor: pointer;}");	//表情样式
-addGlobalStyle(".user-memo {padding:0 .5em; color:#F00;}");	//用户备注样式
+addGlobalStyle(".user-memo {padding:0 .5em; color:#F00; cursor:pointer}");	//用户备注样式
 
 //CTRL+ENTER提交
 $('textarea[name=message]').addClass('mousetrap');
