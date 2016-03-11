@@ -39,9 +39,9 @@ $("a[href^='index.php?action=my&uid='],a[href^='index.php?action=my&pic=&uid=']"
 	if ( $(this).attr('href').indexOf('index.php?action=my&pic=&uid=')>-1){
 		userUID = $(this).attr('href').split('&')[2].replace('=','');
 	}
-	//console.log($(this).attr('href')+'|'+userUID);
-	$(this).after('<span class="user-memo">'+(userMemo[userUID]||'')+'</span>');
-	//console.log($(this).text()+':'+userMemo[userUID]);
+	if(typeof(userMemo[userUID])!='undefined'){
+		$(this).after('<span class="user-memo">'+userMemo[userUID]+'</span>');
+	}
 });
 //console.log(userMemo);
 //将用户的备注信息保存到localStorage中的USER_MEMO中去
