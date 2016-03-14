@@ -70,19 +70,19 @@ function updateUserMemo(inUID, inMemo){
 //JSON.parse(window.localStorage.getItem('USER_MEMO'));
 //用户备注编辑功能
 /*
-if ( window.location.href.indexOf('http://wap.tgfcer.com/index.php?action=my&uid=')==0 || window.location.href.indexOf('http://wap.tgfcer.com/index.php?action=my&pic=&uid=')==0){
-	var tempUID = window.location.href.split('&')[1].replace('=','');
-	if (window.location.href.indexOf('http://wap.tgfcer.com/index.php?action=my&pic=&uid=')==0){
-		tempUID = window.location.href.split('&')[2].replace('=','');
-	}
-	$("a[href^='http://club.tgfcer.com/space.php?action=viewpro&uid=']").after('<br/>用户备注：<input type="text" id="user-memo" value="'+(userMemo[tempUID]||'')+'" /><input type="button" id="user-memo-submit" value="更新" /><br/>');
-	//更新用户备注
-	$('#user-memo-submit').click(function(){
-		userMemo[tempUID] = $('#user-memo').val();
-		window.localStorage.setItem('USER_MEMO',JSON.stringify(userMemo));
-	});
-}
-*/
+ if ( window.location.href.indexOf('http://wap.tgfcer.com/index.php?action=my&uid=')==0 || window.location.href.indexOf('http://wap.tgfcer.com/index.php?action=my&pic=&uid=')==0){
+ var tempUID = window.location.href.split('&')[1].replace('=','');
+ if (window.location.href.indexOf('http://wap.tgfcer.com/index.php?action=my&pic=&uid=')==0){
+ tempUID = window.location.href.split('&')[2].replace('=','');
+ }
+ $("a[href^='http://club.tgfcer.com/space.php?action=viewpro&uid=']").after('<br/>用户备注：<input type="text" id="user-memo" value="'+(userMemo[tempUID]||'')+'" /><input type="button" id="user-memo-submit" value="更新" /><br/>');
+ //更新用户备注
+ $('#user-memo-submit').click(function(){
+ userMemo[tempUID] = $('#user-memo').val();
+ window.localStorage.setItem('USER_MEMO',JSON.stringify(userMemo));
+ });
+ }
+ */
 //20160311 点击用户备注后出现弹出框修改备注
 $(document).delegate('.user-memo','click', function(){
 	var _inputUserMemo = prompt('更新该用户的备注信息', $(this).text());
