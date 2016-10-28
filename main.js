@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         让TGFCER更美好
 // @namespace    http://www.jun4rui.com/(其实并没有)
-// @version      0.3
+// @version      0.5
 // @description  让讨厌的苍蝇走开！
 // @author       jun4rui
 // @match        http://wap.tgfcer.com/*
@@ -10,6 +10,7 @@
 // ==/UserScript==
 
 /**
+ * 0.5更新：修复一些条件处理，修复新出现的附件路径在WAP版下错误的问题
  * 0.4更新：新建自动识别图片并加上[img]标签的功能
  * 0.3更新：卷动到最底部自动载入下一页内容；[作废]
  * 0.2更新：将Footer的功能全部放在顶部固定的导航条中；
@@ -28,7 +29,7 @@ $('div.message>a').mouseover(function(){
 
 
 //初始化localStorate
-if (JSON.parse(window.localStorage.getItem('USER_MEMO'))==null){
+if (JSON.parse(window.localStorage.getItem('USER_MEMO'))===null){
 	window.localStorage.setItem('USER_MEMO','{}');
 }
 //更新/显示 屏幕上用户备注的函数
@@ -57,7 +58,7 @@ showUserMemo();
 //更新localStorage中用户备注的函数
 function updateUserMemo(inUID, inMemo){
 	var _userMemo = JSON.parse(window.localStorage.getItem('USER_MEMO'));
-	if (inMemo==''){
+	if (inMemo===''){
 		delete _userMemo[''+inUID];
 	}else{
 		_userMemo[inUID] = inMemo;
@@ -70,19 +71,19 @@ function updateUserMemo(inUID, inMemo){
 //JSON.parse(window.localStorage.getItem('USER_MEMO'));
 //用户备注编辑功能
 /*
- if ( window.location.href.indexOf('http://wap.tgfcer.com/index.php?action=my&uid=')==0 || window.location.href.indexOf('http://wap.tgfcer.com/index.php?action=my&pic=&uid=')==0){
- var tempUID = window.location.href.split('&')[1].replace('=','');
- if (window.location.href.indexOf('http://wap.tgfcer.com/index.php?action=my&pic=&uid=')==0){
- tempUID = window.location.href.split('&')[2].replace('=','');
- }
- $("a[href^='http://club.tgfcer.com/space.php?action=viewpro&uid=']").after('<br/>用户备注：<input type="text" id="user-memo" value="'+(userMemo[tempUID]||'')+'" /><input type="button" id="user-memo-submit" value="更新" /><br/>');
- //更新用户备注
- $('#user-memo-submit').click(function(){
- userMemo[tempUID] = $('#user-memo').val();
- window.localStorage.setItem('USER_MEMO',JSON.stringify(userMemo));
- });
- }
- */
+if ( window.location.href.indexOf('http://wap.tgfcer.com/index.php?action=my&uid=')==0 || window.location.href.indexOf('http://wap.tgfcer.com/index.php?action=my&pic=&uid=')==0){
+	var tempUID = window.location.href.split('&')[1].replace('=','');
+	if (window.location.href.indexOf('http://wap.tgfcer.com/index.php?action=my&pic=&uid=')==0){
+		tempUID = window.location.href.split('&')[2].replace('=','');
+	}
+	$("a[href^='http://club.tgfcer.com/space.php?action=viewpro&uid=']").after('<br/>用户备注：<input type="text" id="user-memo" value="'+(userMemo[tempUID]||'')+'" /><input type="button" id="user-memo-submit" value="更新" /><br/>');
+	//更新用户备注
+	$('#user-memo-submit').click(function(){
+		userMemo[tempUID] = $('#user-memo').val();
+		window.localStorage.setItem('USER_MEMO',JSON.stringify(userMemo));
+	});
+}
+*/
 //20160311 点击用户备注后出现弹出框修改备注
 $(document).delegate('.user-memo','click', function(){
 	var _inputUserMemo = prompt('更新该用户的备注信息', $(this).text());
@@ -115,10 +116,10 @@ Mousetrap.bind('ctrl+enter', function(){
 });
 
 // 20160303 自动识别图片并加上[img]标签
-$('textarea[name=message]').after('<br/><span id="funcAddImg">[上图]</span>')
+$('textarea[name=message]').after('<br/><span id="funcAddImg">[上图]</span>');
 $('#funcAddImg').click(function(){
 	$('textarea[name=message]').val(
-		$('textarea[name=message]').val().replace(/((http|https){1}:\/\/[\/A-Za-z0-9\-\.\_]+\.(jpg|gif){1})/g,'[img]$1[/img]')
+		$('textarea[name=message]').val().replace(/((http|https){1}:\/\/[\/A-Za-z0-9\-\.\_]+\.(jpg|gif|png){1})/g,'[img]$1[/img]')
 	);
 });
 //20160303 表情库
@@ -261,7 +262,7 @@ $('#scroller').delegate('.info-ban-section', 'click', function(){
 
 });
 //如果当前页面是内容页的处理
-if (PageCurrent.indexOf(PageInfo)==0){
+if (PageCurrent.indexOf(PageInfo)===0){
 	$('.infobar').each(function(){
 		var author = $(this).find('a').eq(1).text();
 		for (i in BanListArray){
@@ -281,7 +282,25 @@ if (PageCurrent.indexOf(PageInfo)==0){
 	});
 }
 
-
+$('a,img').each(function(){
+    //http://club.tgfcer.net/attachments/day_161028/20161028_1961_b8a13d57423b4516164e5LCjwkFkRZ6O.jpg
+    //获取所有的a和img元素
+    console.log($(this));
+    var linkType = '';
+    var linkUrl  = '';
+    if ($(this).is('a')){
+        linkType = 'href';
+    }
+    if ($(this).is('img')){
+        linkType = 'src';
+    }
+    linkUrl = $(this).attr(linkType);
+    console.log('linkType:',linkType,'\n','linkUrl:',linkUrl);
+    //排除掉所有非attachments目录下的
+    if (typeof(linkUrl)!='undefined' && linkUrl.indexOf('http://club.tgfcer.com/attachments/')>-1){
+        $(this).attr(linkType, linkUrl.replace('tgfcer.com','tgfcer.net'));
+    }
+});
 
 //举动到最下方自动载入下一页内容
 /*
