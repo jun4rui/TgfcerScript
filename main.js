@@ -180,7 +180,7 @@ $('#footer a').each(function(){
 	$('#scroller>.navbar').append('&nbsp|&nbsp;<a class="nav_link" href="'+$(this).attr('href')+'">'+$(this).text()+'</a>');
 });
 //在原生导航栏中加入设置模块
-$('div.navbar').append('&nbsp;|&nbsp;<a href="#" class="nav_link" id="tgbs-btn" title="让TGFCER更美好的设置">TGGM</a>');
+$('div.navbar').append('&nbsp;|&nbsp;<a href="#" class="nav_link" id="tgbs-btn" title="让TGFCER更美好的设置">屏蔽</a>');
 //点击模块的处理
 $('#scroller').delegate('#tgbs-btn', 'click', function(){
 	if ($('#tgbs').css('display')=='none'){
