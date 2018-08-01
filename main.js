@@ -5,6 +5,7 @@
 // @description  让讨厌的苍蝇走开！
 // @author       jun4rui
 // @match        http://wap.tgfcer.com/*
+// @match        https://wap.tgfcer.com/*
 // @require      https://raw.githubusercontent.com/ccampbell/mousetrap/master/mousetrap.js
 // @grant        none
 // ==/UserScript==
