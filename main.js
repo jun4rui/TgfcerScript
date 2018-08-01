@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         让TGFCER更美好
 // @namespace    http://www.jun4rui.com/(其实并没有)
-// @version      0.5
+// @version      0.7
 // @description  让讨厌的苍蝇走开！
 // @author       jun4rui
 // @match        http://wap.tgfcer.com/*
@@ -11,6 +11,8 @@
 // ==/UserScript==
 
 /**
+ * 0.7更新：支持http和https
+ * 0.6更新：支持https
  * 0.5更新：修复一些条件处理，修复新出现的附件路径在WAP版下错误的问题
  * 0.4更新：新建自动识别图片并加上[img]标签的功能
  * 0.3更新：卷动到最底部自动载入下一页内容；[作废]
