@@ -109,7 +109,7 @@ function addStyle(css) {
 }
 //20160306
 addGlobalStyle(".face-unit {width: 64px;height: 64px;cursor: pointer;}");	//表情样式
-addGlobalStyle(".user-memo {padding:0 .5em; color:#F00; cursor:pointer}");	//用户备注样式
+addGlobalStyle(".user-memo {padding: 0 .5em;color: #fff;cursor: pointer;background-color: #333333;box-shadow: 1px 1px 2px #333333;display: inline-block;border-radius: 2px;margin: 0 .5em;}");	//用户备注样式
 
 //CTRL+ENTER提交
 $('textarea[name=message]').addClass('mousetrap');
